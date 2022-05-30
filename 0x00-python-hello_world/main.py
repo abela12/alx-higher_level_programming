@@ -1,2 +1,2 @@
 #!/usr/bin/python3
-print("BestSchool")
+print("Best School")
