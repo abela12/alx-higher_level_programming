@@ -1,59 +1,40 @@
 #include "lists.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
 /**
- * is_palindrome - Check if is palindrome
- *
- * @head: Head of Linked List
- *
- * Return: 0 if not palindrome, 1 if is palindrome
+ * is_palindrome - check if linked list is a palindrome
+ * @head: pointer to pointer to head of the list
+ * Return: 0 if it is not a palindrome, 1 if it is a palindrome
  */
-
 int is_palindrome(listint_t **head)
 {
+	listint_t *temp = *head;
+	int size = sizeof(int);
+	int i = 1;
+	int left = 0;
+	int right = i - 1;
+	int *arr = malloc(100000 * sizeof(int));
 
-	if (!*head || !(*head))
-	{
+	arr[0] = (*head)->n;
+
+	if (*head == NULL)
 		return (1);
-	}
 
-	if (p_check(head, *head))
+	temp = temp->next;
+
+	while (temp != NULL)
 	{
-		return (1);
+		size += sizeof(int);
+		arr = realloc(arr, size);
+		arr[i] = temp->n;
+		i++;
+		temp = temp->next;
 	}
-	return (0);
-}
-
-/**
- *  p_check - Check for palindrome
- *
- *  @left: Go left
- *
- *  @right: Go right
- *
- *  Return: Integer
- */
-
-
-int p_check(listint_t **left, listint_t *right)
-{
-	int is_p = 0;
-
-	if (right)
+	for (; left < right; left++, right--)
 	{
-		is_p = p_check(left, right->next);
+		if (arr[left] != arr[right])
+			return (0);
 	}
-	else
-	{
-		return (1);
-	}
-
-	if (is_p == 1)
-	{
-		if ((*left)->n == right->n)
-		{
-			(*left) = (*left)->next;
-			return (1);
-		}
-	}
-	return (0);
+	return (1);
 }
