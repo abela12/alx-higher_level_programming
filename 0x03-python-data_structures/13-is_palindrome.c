@@ -1,40 +1,70 @@
 #include "lists.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
-/**
- * is_palindrome - check if linked list is a palindrome
- * @head: pointer to pointer to head of the list
- * Return: 0 if it is not a palindrome, 1 if it is a palindrome
- */
+
 int is_palindrome(listint_t **head)
 {
-	listint_t *temp = *head;
-	int size = sizeof(int);
-	int i = 1;
-	int left = 0;
-	int right = i - 1;
-	int *arr = malloc(100000 * sizeof(int));
+  listint_t *nhead, *tort, *hare, *ptort;
+  listint_t *cut = NULL, *half, *it1, *it2;
 
-	arr[0] = (*head)->n;
+  if (!head || !*head)
+    return (1);
 
-	if (*head == NULL)
-		return (1);
-
-	temp = temp->next;
-
-	while (temp != NULL)
+  nhead = *head;
+  if (nhead->next != NULL)
+    {
+      for (hare = nhead, tort = nhead; hare != NULL && hare->next != NULL;
+	   ptort = tort, tort = tort->next)
+	hare = hare->next->next;
+      if (hare != NULL)
 	{
-		size += sizeof(int);
-		arr = realloc(arr, size);
-		arr[i] = temp->n;
-		i++;
-		temp = temp->next;
+	  cut = tort;
+	  tort = tort->next;
 	}
-	for (; left < right; left++, right--)
+      ptort->next = NULL;
+      half = tort;
+      it1 = reverse_listint(&half);
+      for (it2 = *head; it2; it1 = it1->next, it2 = it2->next)
 	{
-		if (arr[left] != arr[right])
-			return (0);
+	  if (it2->n != it1->n)
+	    return (0);
 	}
-	return (1);
+      if (cut == NULL)
+	ptort->next = half;
+      else
+	{
+	  ptort->next = cut;
+	  cut->next = half;
+	}
+    }
+
+  return (1);
+}
+
+/**
+ * reverse_listint - Reverses a linked list in pladce
+ * @head: Pointer to a pointer pointing to the first item in the list
+ *
+ * Return: The new head of the reversed list
+ */
+listint_t *reverse_listint(listint_t **head)
+{
+  listint_t *next = NULL, *prev = NULL;
+
+  if (!head || !*head)
+    return (NULL);
+
+  while ((*head)->next)
+    {
+      next = (*head)->next;
+
+      (*head)->next = prev;
+
+      prev = *head;
+
+      *head = next;
+    }
+
+  (*head)->next = prev;
+
+  return (*head);
 }
